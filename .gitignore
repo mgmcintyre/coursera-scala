@@ -19,6 +19,7 @@
 /sandbox/
 
 # eclipse, intellij
+/.metadata
 /.classpath
 /.project
 /src/intellij/*.iml
