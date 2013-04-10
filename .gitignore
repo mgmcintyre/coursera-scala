@@ -13,21 +13,26 @@
 /build/
 /dists/
 
+# eclipse
+.project
+.metadata
+.cache
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
 # other
 /out/
 /bin/
 /sandbox/
-
-# eclipse, intellij
-/.metadata
-/.classpath
-/.project
-/src/intellij/*.iml
-/src/intellij/*.ipr
-/src/intellij/*.iws
-/.cache
-/.idea
-/.settings
 
 # bak files produced by ./cleanup-commit
 *.bak
