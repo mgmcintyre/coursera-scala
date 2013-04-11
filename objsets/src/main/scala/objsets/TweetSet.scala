@@ -15,7 +15,7 @@ class Tweet(val user: String, val text: String, val retweets: Int) {
     this.text.contains(k)
     
   def containsAnyKeywords(ls: List[String]) : Boolean =
-    ls.map(keyword => this.containsKeyword(keyword)).exists(p => p == true)
+    ls.map(keyword => this.containsKeyword(keyword)).exists(p => p)
 }
 
 /**
@@ -122,6 +122,8 @@ class Empty extends TweetSet {
   def mostRetweeted: Tweet = throw new java.util.NoSuchElementException
   
   def descendingByRetweet: TweetList = Nil
+  
+  override def toString = "."
 
   /**
    * The following methods are already implemented
@@ -136,16 +138,13 @@ class Empty extends TweetSet {
   def foreach(f: Tweet => Unit): Unit = ()
 }
 
-class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
+class NonEmpty(val elem: Tweet, val left: TweetSet, val right: TweetSet) extends TweetSet {
 
   def filterAcc(p: Tweet => Boolean, acc: TweetSet): TweetSet =
-    if (p(elem))
-      (left union right) filterAcc (p, acc.incl(elem))
-    else 
-      (left union right) filterAcc (p, acc)
-    
-  def union(that: TweetSet): TweetSet = 
-    ((left union right) union that) incl elem
+    if (p(elem)) right.filterAcc(p, left.filterAcc(p, acc.incl(elem)))
+    else right.filterAcc(p, left.filterAcc(p, acc))
+  
+  def union(that: TweetSet): TweetSet = right.union(left.union(that.incl(elem)))
     
   def mostRetweeted: Tweet = {
     ((left union right) filter (tw => tw.retweets > elem.retweets)) match {
@@ -158,6 +157,8 @@ class NonEmpty(elem: Tweet, left: TweetSet, right: TweetSet) extends TweetSet {
     val x = this.mostRetweeted
     new Cons(x, (this remove x).descendingByRetweet)
   }
+  
+  override def toString = "{" + left + elem +  right + "}"
 
   /**
    * The following methods are already implemented
